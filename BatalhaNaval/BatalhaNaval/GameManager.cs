@@ -1,73 +1,99 @@
-﻿public class GameManager()
+﻿public class GameManager
 {
+    public int PlayerShots { get; private set; } = 0;
+    public int PlayerHits { get; private set; } = 0;
+    public int ComputerShots { get; private set; } = 0;
+    public int ComputerHits { get; private set; } = 0;
+
+    public void ResetStats()
+    {
+        PlayerShots = 0;
+        PlayerHits = 0;
+        ComputerShots = 0;
+        ComputerHits = 0;
+    }
 
     public bool CheckLose(Board board)
     {
         int count = 0;
-        for(int l = 0; l < 10 ; l++)
+        for (int l = 0; l < Board.Size; l++)
         {
-            for (int c = 0; c < 10; c++)
+            for (int c = 0; c < Board.Size; c++)
             {
                 if (board.Positions[l, c] == 1) count++;
             }
         }
 
-        if (count == 0) return true;
-        return false;
+        return count == 0;
     }
-    
-    //função de tiro, ela retorna um int porque preciso saber se vai atirar de novo, 1 vai atirar de novo e 0 não vai
+
+    // Retorna 1 para atirar de novo e 0 para passar a vez
     public int Shoot(Board board, int line, int column)
     {
-        
-        if (board.Positions[line, column] == 1) //checa se na posição alvo tem um barco
+        if (line < 0 || line >= Board.Size || column < 0 || column >= Board.Size)
         {
-            Console.WriteLine($"Tiro certeiro em [{line}, {column}]! Irá atirar novamente!(aguarde)");
-            board.Positions[line, column] = 2;
-            Thread.Sleep(2000);
+            Console.WriteLine("\tCoordenada fora do tabuleiro! Tente novamente.");
+            Thread.Sleep(1500);
             return 1;
-        } if (board.Positions[line, column] == 0)//checar se é vazio(agua)
+        }
+
+        if (board.Positions[line, column] == 2 || board.Positions[line, column] == 3)
         {
-            Console.WriteLine($"Tiro errado em [{line}, {column}]! Passando a vez(aguarde)");
-            Thread.Sleep(2000);
+            Console.WriteLine($"\tVocê já atirou aqui em [{line}, {column}]! Atire de novo! (aguarde)");
+            Thread.Sleep(1500);
+            return 1;
+        }
+
+        PlayerShots++;
+
+        if (board.Positions[line, column] == 1)
+        {
+            PlayerHits++;
+            Console.WriteLine($"\tTiro certeiro em [{line}, {column}]! Irá atirar novamente! (aguarde)");
+            board.Positions[line, column] = 2;
+            Thread.Sleep(1500);
+            return 1;
+        }
+        else
+        {
+            Console.WriteLine($"\tTiro errado em [{line}, {column}]! Passando a vez (aguarde)");
             board.Positions[line, column] = 3;
+            Thread.Sleep(1500);
             return 0;
         }
-        if (board.Positions[line, column] == 2 || board.Positions[line, column] == 3) //checa se já atirou nessa posição, e atira de novo
-        {
-            Console.WriteLine($"Você já atirou aqui em [{line}, {column}]! Atire de novo!(aguarde)");
-            Thread.Sleep(2000);
-            return 1;   
-        }
-        return 0;
     }
 
-    public void ComputerShoot(Board board) 
+    public void ComputerShoot(Board board)
     {
+        bool keepShooting = true;
 
-        int lineAim = Random.Shared.Next(0, 10);
-        int colunmAim = Random.Shared.Next(0, 10);
-
-        //reiniciando a posição até que mire em um espaço vazio ou com um navio
-        while (board.Positions[lineAim, colunmAim] != 0 && board.Positions[lineAim, colunmAim] != 1)
+        while (keepShooting && !CheckLose(board))
         {
-            lineAim = Random.Shared.Next(0, 10);
-            colunmAim = Random.Shared.Next(0, 10);
-        }
+            int lineAim = Random.Shared.Next(0, Board.Size);
+            int columnAim = Random.Shared.Next(0, Board.Size);
 
-        if (board.Positions[lineAim, colunmAim] == 0) //checando se a posição é vazia
-        {
-            Console.WriteLine($"\n\t O computador errou o tiro em [{lineAim}, {colunmAim}]! Sua vez!(aguarde)");
-            board.Positions[lineAim, colunmAim] = 3;
-            Thread.Sleep(2000);
-        }
+            while (board.Positions[lineAim, columnAim] != 0 && board.Positions[lineAim, columnAim] != 1)
+            {
+                lineAim = Random.Shared.Next(0, Board.Size);
+                columnAim = Random.Shared.Next(0, Board.Size);
+            }
 
-        if (board.Positions[lineAim, colunmAim] == 1)//checando se tem um barco na posição
-        {
-            Console.WriteLine($"\n\t O computador te acertou em [{lineAim}, {colunmAim}]! E irá atirar de novo!");
-            board.Positions[lineAim, colunmAim] = 2;
-            Thread.Sleep(1000);
-            ComputerShoot(board);
+            ComputerShots++;
+
+            if (board.Positions[lineAim, columnAim] == 0)
+            {
+                Console.WriteLine($"\n\tO computador errou o tiro em [{lineAim}, {columnAim}]! Sua vez! (aguarde)");
+                board.Positions[lineAim, columnAim] = 3;
+                Thread.Sleep(1500);
+                keepShooting = false;
+            }
+            else if (board.Positions[lineAim, columnAim] == 1)
+            {
+                ComputerHits++;
+                Console.WriteLine($"\n\tO computador te acertou em [{lineAim}, {columnAim}]! E irá atirar de novo!");
+                board.Positions[lineAim, columnAim] = 2;
+                Thread.Sleep(1000);
+            }
         }
     }
 }

@@ -1,17 +1,16 @@
-﻿using System.Security.Cryptography;
-
-public class Ship(Board board, int size)
+﻿public class Ship(Board board, int size)
 {
     public int BoardBounds = Board.Size - 1;
     public Board OwnerBoard = board;
     public int Size { get; set; } = size;
-    public int Line { get; set; } 
+    public int Line { get; set; }
     public int Column { get; set; }
     public int Direction { get; set; }
 
     public bool CheckIfItGoesBeyondFromTheBorders()
     {
-        return (this.Direction == 1 && (this.Line + 1) - this.Size < 0) || (this.Direction == 2 && (this.Column - 1) + this.Size > this.BoardBounds);
+        return (this.Direction == 1 && (this.Line + 1) - this.Size < 0) ||
+               (this.Direction == 2 && (this.Column - 1) + this.Size > this.BoardBounds);
     }
 
     public bool CheckForOverlapOrContact()
@@ -54,6 +53,4 @@ public class Ship(Board board, int size)
             }
         }
     }
-
-    
 }
