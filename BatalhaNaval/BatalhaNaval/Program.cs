@@ -1,1 +1,2 @@
-﻿Console.WriteLine("Hello, World!");
+﻿Board MyBoard = new Board();
+Board EnemyBoard = new Board();
