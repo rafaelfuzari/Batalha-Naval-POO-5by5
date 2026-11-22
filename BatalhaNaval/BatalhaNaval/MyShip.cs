@@ -8,7 +8,7 @@
         if (validDirection == false)
         {
             Console.WriteLine("\nNão é possível posicionar o navio nessa posição e ângulo pois o navio está parcialmente fora do tabuleiro. Tente novamente.");
-
+            Thread.Sleep(3000);
             return false;
         }
 
@@ -17,7 +17,7 @@
         if (thereIsNoOverlapOrContact == false)
         {
             Console.WriteLine("\nNão é possível posicionar o navio nessa posição por sobreposição ou contato de navios. Tente novamente.");
-
+            Thread.Sleep(3000);
             return false;
         }
 

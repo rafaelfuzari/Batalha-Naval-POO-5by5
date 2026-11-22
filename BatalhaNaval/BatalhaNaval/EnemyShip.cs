@@ -9,7 +9,7 @@ public class EnemyShip(Board board, int size) : Ship(board, size)
 
         while (validDirection == false)
         {
-            this.Direction = RandomNumberGenerator.GetInt32(1, 2);
+            this.Direction = RandomNumberGenerator.GetInt32(1, 3);
             validDirection = !CheckIfItGoesBeyondFromTheBorders();
         }
     }
