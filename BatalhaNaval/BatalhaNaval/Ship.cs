@@ -30,6 +30,10 @@
             for (int c = this.Column - 1; c < (this.Column + ColumnVariation) + 1; c++)
             {
                 if (c < 0 || c > this.BoardBounds) continue;
+
+                //Verifica se essa posiçao é uma quina
+                if ((l == this.Line + 1 && c == this.Column - 1) || (l == this.Line - lineVariation && c == this.Column - 1) || (l == this.Line + 1 && c == this.Column + ColumnVariation) || (l == this.Line - lineVariation && c == this.Column + ColumnVariation)) continue;
+
                 if (OwnerBoard.Positions[l, c] == 1) thereIsNoOverlapOrContact = false;
             }
         }

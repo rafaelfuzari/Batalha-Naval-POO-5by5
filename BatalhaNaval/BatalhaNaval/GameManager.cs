@@ -33,14 +33,14 @@
         if (line < 0 || line >= Board.Size || column < 0 || column >= Board.Size)
         {
             Console.WriteLine("\tCoordenada fora do tabuleiro! Tente novamente.");
-            Thread.Sleep(1500);
+            Thread.Sleep(3000);
             return 1;
         }
 
         if (board.Positions[line, column] == 2 || board.Positions[line, column] == 3)
         {
             Console.WriteLine($"\tVocê já atirou aqui em [{line}, {column}]! Atire de novo! (aguarde)");
-            Thread.Sleep(1500);
+            Thread.Sleep(3000);
             return 1;
         }
 
@@ -51,14 +51,14 @@
             PlayerHits++;
             Console.WriteLine($"\tTiro certeiro em [{line}, {column}]! Irá atirar novamente! (aguarde)");
             board.Positions[line, column] = 2;
-            Thread.Sleep(1500);
+            Thread.Sleep(3000);
             return 1;
         }
         else
         {
             Console.WriteLine($"\tTiro errado em [{line}, {column}]! Passando a vez (aguarde)");
             board.Positions[line, column] = 3;
-            Thread.Sleep(1500);
+            Thread.Sleep(3000);
             return 0;
         }
     }
@@ -84,7 +84,7 @@
             {
                 Console.WriteLine($"\n\tO computador errou o tiro em [{lineAim}, {columnAim}]! Sua vez! (aguarde)");
                 board.Positions[lineAim, columnAim] = 3;
-                Thread.Sleep(1500);
+                Thread.Sleep(3000);
                 keepShooting = false;
             }
             else if (board.Positions[lineAim, columnAim] == 1)
@@ -92,7 +92,7 @@
                 ComputerHits++;
                 Console.WriteLine($"\n\tO computador te acertou em [{lineAim}, {columnAim}]! E irá atirar de novo!");
                 board.Positions[lineAim, columnAim] = 2;
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
             }
         }
     }
